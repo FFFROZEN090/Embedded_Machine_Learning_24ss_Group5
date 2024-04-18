@@ -1,23 +1,10 @@
-# Use Miniconda base image compatible with ARM64
-FROM continuumio/miniconda3
+FROM nvcr.io/nvidia/pytorch:21.08-py3
+#first tries with 18.05-py3 
+#latest image:21.06-py3
+#19.05-py3 not compatible with gpu
+#try tobis version
+RUN set -ex
 
-# Set the working directory in the container
-WORKDIR /usr/src/app
-
-# Update Conda and Pip, and add necessary channels
-RUN conda update -n base -c defaults conda && \
-    conda install pip && \
-    pip install --upgrade pip && \
-    conda config --add channels conda-forge
-
-# Install Python and basic packages with Conda
-RUN conda create -n EML python=3.10 scipy numpy matplotlib
-
-# Activate the environment and install PyTorch packages via Pip
-SHELL ["conda", "run", "-n", "EML", "/bin/bash", "-c"]
-
-# Using pip to install PyTorch packages directly from PyTorch's wheel links
-RUN pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
-
-# Set the default command to execute
-ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "EML", "python"]
+RUN pip install --upgrade pip && \
+    pip install Cython tensorboard matplotlib numpy segmentation-models-pytorch opentsne seaborn scikit-learn scipy elasticdeform && \
+    pip install pillow==9.5.0 scikit-image==0.21.0 imagecodecs==2022.12.24 opencv-python==4.1.2.30 opencv-python-headless==4.1.2.30 torchmetrics==1.2.0 deepcell==0.12.9
