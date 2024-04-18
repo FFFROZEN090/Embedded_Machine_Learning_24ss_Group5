@@ -1,0 +1,2 @@
+# Embedded_Machine_Learning_24ss_Group5
+Embedded machine learning exercise repositories.
