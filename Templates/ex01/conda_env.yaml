@@ -1,0 +1,15 @@
+name: EML
+channels:
+  - pytorch
+  - nvidia
+  - defaults
+dependencies:
+  - python=3.10.13
+  - pytorch==1.13.1
+  - torchvision==0.14.1
+  - torchaudio==0.13.1
+  - pytorch-cuda=11.7
+  - scipy=1.11.1
+  - numpy=1.26.0
+  - matplotlib=3.7.2
+  - pip=23.2.1
