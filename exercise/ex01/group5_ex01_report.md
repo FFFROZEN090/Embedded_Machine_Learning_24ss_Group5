@@ -42,7 +42,7 @@ def ground_truth_function(x):
 
 Use torch.sin to generate ground truth as
 
-![Initial_data](/Users/jli/Embedded_Machine_Learning/Embedded_Machine_Learning_24ss_Group5/exercise/ex01/Initial_data.png)
+![Initial_data](Initial_data.png)
 
 The blue point shows training set and x mark shows test set with Gaussian noise level 0.15
 
@@ -75,7 +75,7 @@ def error_function(*model*, *x_data*, *y_data*):
 With degree of 3, we can use `np.polynomial.Polynomial` model to generate polynomial model for training data
 
 Result shows
-![Initial_fit](/Users/jli/Embedded_Machine_Learning/Embedded_Machine_Learning_24ss_Group5/exercise/ex01/Initial_fit.png)
+![Initial_fit](Initial_fit.png)
 
 
 
@@ -94,7 +94,7 @@ test_err = error_function(model, x_test, y_test)
 
 and result shows
 
-![Overfitted_fit_11](/Users/jli/Embedded_Machine_Learning/Embedded_Machine_Learning_24ss_Group5/exercise/ex01/Overfitted_fit_11.png)
+![Overfitted_fit_11](Overfitted_fit_11.png)
 
 Obviously, it do fit all data points to get a minimized error value, but it ignore the general scope of whole dataset and we can assume this model parameters lose generalize ability.
 
@@ -128,9 +128,72 @@ def rmse(model, x_data, y_data):
 
 
 
-![RMS_plot](/Users/jli/Embedded_Machine_Learning/Embedded_Machine_Learning_24ss_Group5/exercise/ex01/RMS_plot.png)
+![RMS_plot](RMS_plot.png)
 
-It is clear that 
+And recorded error shows
+
+![RMSE_dgrees_plot](RMSE_dgrees_plot.png)
+
+for higher degree model polynomial the testing error greater than train set wich mean the model is overfitted, so  more improvement for training needed.
 
 
 
+### 1.2.5 *Vary the size of the data, but keep the degree of the Polynomial constant 10*
+
+
+
+Generally increase the sample size, and until the RMS Error between train and test set leads to a small enoungh difference
+
+```python
+# Starting with 10-th degree polynomial
+""" 
+Change the sample size of the data until the RMSE difference between the train and test data is less than 0.0001.
+Parameters:
+    x_train: torch.Tensor
+    y_train: torch.Tensor
+    x_test: torch.Tensor
+    y_test: torch.Tensor
+    model_degree: int
+    noise_amplitude: float
+    n_samples: int
+    step_size: int
+    
+Returns:
+    steps: int
+    train_err: float
+    test_err: float
+    n_samples: int
+"""
+def vary_data_size(x_train, y_train, x_test, y_test, model_degree, noise_amplitude, n_samples, step_size):
+    steps = 0
+    train_err = []
+    test_err = []
+    while True:
+        steps += 1
+        x_train = torch.linspace(0, 1, n_samples)
+        y_train = ground_truth_function(x_train) + torch.normal(0., noise_amplitude, size=(n_samples,))
+        x_test = torch.linspace(0, 1, n_samples)
+        y_test = ground_truth_function(x_test) + torch.normal(0., noise_amplitude, size=(n_samples,))
+        model = np.polynomial.Polynomial.fit(x_train, y_train, deg=model_degree)
+        train_err.append(rmse(model, x_train, y_train))
+        test_err.append(rmse(model, x_test, y_test))
+        if abs(train_err[-1] - test_err[-1]) < 0.0001:
+            break
+        n_samples += step_size
+
+    return steps, train_err, test_err, n_samples
+```
+
+
+
+and the result can be shown as 
+
+![RMSE_diff](RMSE_diff.png)
+
+It turns out to be, about 90 samples can concur the overfitting for this task.
+
+
+
+### Conclusion
+
+By introducing, larger dataset with more samples or choose proper degree or set a proper error function with good regularization can overcome overfitting to some extend.
