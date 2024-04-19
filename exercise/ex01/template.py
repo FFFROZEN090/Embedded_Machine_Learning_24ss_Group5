@@ -84,8 +84,12 @@ plt.clf()
 # Define Root Mean Squared Error function
 def rmse(model, x_data, y_data):
     y_pred = model(x_data)
-    rmse = torch.sqrt(torch.mean((y_pred - y_data) ** 2))
+    rmse = torch.sqrt(2 * error_function(model, x_data, y_data) / len(x_data))
     return rmse
+
+# Store the RMSE values for each degree of the polynomial
+train_err_degrees = []
+test_err_degrees = []
 
 # Define a function that plot Polynomial from degree 0 to 11 in a single plot with rms error, the plot should have 12 subplots with 6 rows and 2 columns
 def plot_polynomials(x_train, y_train, x_test, y_test):
@@ -95,6 +99,8 @@ def plot_polynomials(x_train, y_train, x_test, y_test):
         model = np.polynomial.Polynomial.fit(x_train, y_train, deg=i)
         train_err = rmse(model, x_train, y_train)
         test_err = rmse(model, x_test, y_test)
+        train_err_degrees.append(train_err)
+        test_err_degrees.append(test_err)
         # plot ground truth
         axs[i].plot(torch.linspace(0, 1, 1000), ground_truth_function(torch.linspace(0, 1, 1000)), label='Ground truth')
         axs[i].plot(x_train, y_train, 'ob', label='Train data')
@@ -110,6 +116,19 @@ def plot_polynomials(x_train, y_train, x_test, y_test):
 
 plot_polynomials(x_train, y_train, x_test, y_test)
 plt.savefig('RMS_plot.png')
+plt.clf()
+
+# Plot the RMSE values for each degree of the polynomial and show data points
+fig, ax = plt.subplots()
+# Show data points
+ax.plot(range(12), train_err_degrees, 'ob', label='Train data')
+ax.plot(range(12), test_err_degrees, 'xr', label='Test data')
+ax.plot(range(12), train_err_degrees, label='Train RMSE')
+ax.plot(range(12), test_err_degrees, label='Test RMSE')
+ax.set_xlabel("Degree of the polynomial")
+ax.set_ylabel("RMSE")
+ax.legend()
+plt.savefig('RMSE_dgrees_plot.png')
 plt.clf()
 
 # Vary with the size of the data
