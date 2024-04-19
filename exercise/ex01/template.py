@@ -153,19 +153,22 @@ def vary_data_size(x_train, y_train, x_test, y_test, model_degree, noise_amplitu
     return steps, train_err, test_err, n_samples
    
 
-steps, train_err, test_err, n_samples = vary_data_size(x_train, y_train, x_test, y_test, 10, 0.15, 11, 1)
+steps, train_err, test_err, n_samples = vary_data_size(x_train, y_train, x_test, y_test, 10, 0.15, 10, 1)
 
 # Plot the Train RMSE and Test RMSE and also shows the difference between them
-def plot_rmse_diff(train_err, test_err, steps):
-    plt.plot(range(steps), train_err, label='Train RMSE')
-    plt.plot(range(steps), test_err, label='Test RMSE')
-    plt.fill_between(range(steps), train_err, test_err, color='gray', alpha=0.5, label='Difference')
-    plt.xlabel("Steps")
-    plt.ylabel("RMSE")
+def plot_rmse_diff(train_err, test_err, n_samples):
+    # Take Logrithm of the RMSE values and plot them with the number of samples
+    plt.plot(np.log(train_err), label='Train RMSE')
+    plt.plot(np.log(test_err), label='Test RMSE')
+    # Fill the area between the two lines
+    plt.fill_between(range(len(train_err)), np.log(train_err), np.log(test_err), color='gray', alpha=0.5)
+    plt.xlabel("Number of samples")
+    plt.ylabel("Log(RMSE)")
+    plt.title(f"Number of samples: {n_samples} with Degree 10 Polynomial")
     plt.legend()
     plt.show()
 
-plot_rmse_diff(train_err, test_err, steps)
+plot_rmse_diff(train_err, test_err, n_samples)
 plt.savefig('RMSE_diff.png')
 plt.clf()
 
