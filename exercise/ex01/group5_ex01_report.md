@@ -24,7 +24,9 @@ I fully accept this paper because a standard for performance measurement is esse
 
 
 
-### 1.2.1 *generate data of the shape h(x) = sin(2πx),*
+### 1.2.1 *generate data of the shape h(x) = sin(2πx)*
+
+Use `torch.sin` to generate the ground truth data ℎ(𝑥)=sin⁡(2𝜋𝑥)*h*(*x*)=sin(2*π**x*). The dataset consists of training points (blue dots) and test points (cross marks), both with a Gaussian noise level of 0.15. The curve represents the ground truth we aim to model
 
 ```python
 def ground_truth_function(x):
@@ -40,27 +42,19 @@ def ground_truth_function(x):
 
 
 
-Use torch.sin to generate ground truth as
+
 
 ![Initial_data](Initial_data.png)
-
-The blue point shows training set and x mark shows test set with Gaussian noise level 0.15
-
-and the curve is ground truth value which we want to chase.
 
 
 
 ### 1.2.2 *Extend the error function to reflect the non-regularized error function from the lecture.*
 
-The error function in lecture is 
-
-
+Extend the error function to reflect the non-regularized form discussed in the lecture:
 
 $E(w) = \frac{1}{2} \sum_{n=1}^{N} (h(x_n, w) - t_n)^2$
 
-
-
-and implement it as 
+This error function calculates the mean squared error between the predicted outputs and the actual targets.
 
 ```python
 def error_function(*model*, *x_data*, *y_data*):
@@ -72,16 +66,14 @@ def error_function(*model*, *x_data*, *y_data*):
     return error
 ```
 
-With degree of 3, we can use `np.polynomial.Polynomial` model to generate polynomial model for training data
 
-Result shows
 ![Initial_fit](Initial_fit.png)
 
 
 
 ### 1.2.3 *Create a new plot for an overfitted Polynomial of 11-th degree*
 
-In order to get a overfit, use 11 degree
+To demonstrate overfitting, fit an 11th-degree polynomial to the data. The resulting model fits the training data points perfectly but fails to generalize, as indicated by the poor fit over the test data. This model has minimized training error at the cost of losing generalization capability.
 
 ```python
 model_degree = 11
@@ -90,13 +82,7 @@ train_err = error_function(model, x_train, y_train)
 test_err = error_function(model, x_test, y_test)
 ```
 
-
-
-and result shows
-
 ![Overfitted_fit_11](Overfitted_fit_11.png)
-
-Obviously, it do fit all data points to get a minimized error value, but it ignore the general scope of whole dataset and we can assume this model parameters lose generalize ability.
 
 
 
@@ -104,7 +90,7 @@ Obviously, it do fit all data points to get a minimized error value, but it igno
 
 
 
-We design RSM Error with equation
+Investigate the impact of varying the polynomial degree from 0 to 11. Use the Root Mean Squared Error (RMSE) for assessment:
 
 
 
@@ -112,7 +98,7 @@ $E_{RMS} = \sqrt{\frac{2E(w)}{N}}$​
 
 
 
-and get code implementation
+
 
 ```python
 # Define Root Mean Squared Error function
@@ -124,17 +110,11 @@ def rmse(model, x_data, y_data):
 
 
 
-
-
-
+This study reveals that higher-degree polynomials tend to overfit the training data, leading to larger errors on the test set compared to the training set.
 
 ![RMS_plot](RMS_plot.png)
 
-And recorded error shows
-
 ![RMSE_dgrees_plot](RMSE_dgrees_plot.png)
-
-for higher degree model polynomial the testing error greater than train set wich mean the model is overfitted, so  more improvement for training needed.
 
 
 
@@ -142,7 +122,7 @@ for higher degree model polynomial the testing error greater than train set wich
 
 
 
-Generally increase the sample size, and until the RMS Error between train and test set leads to a small enoungh difference
+Adjust the size of the dataset while keeping the polynomial degree constant at 10. The goal is to find the sample size where the RMSE between the training and test sets is small enough (less than 0.0001 difference). 
 
 ```python
 # Starting with 10-th degree polynomial
@@ -186,14 +166,12 @@ def vary_data_size(x_train, y_train, x_test, y_test, model_degree, noise_amplitu
 
 
 
-and the result can be shown as 
+It turns out that approximately 90 samples effectively mitigate overfitting for this task.
 
 ![RMSE_diff](RMSE_diff.png)
-
-It turns out to be, about 90 samples can concur the overfitting for this task.
 
 
 
 ### Conclusion
 
-By introducing, larger dataset with more samples or choose proper degree or set a proper error function with good regularization can overcome overfitting to some extend.
+To mitigate overfitting, one can increase the sample size, choose an appropriate polynomial degree, or utilize a well-defined error function with regularization. These strategies can significantly enhance model generalization.
