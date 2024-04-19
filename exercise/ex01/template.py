@@ -83,7 +83,6 @@ plt.clf()
 
 # Define Root Mean Squared Error function
 def rmse(model, x_data, y_data):
-    y_pred = model(x_data)
     rmse = torch.sqrt(2 * error_function(model, x_data, y_data) / len(x_data))
     return rmse
 
