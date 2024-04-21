@@ -112,7 +112,9 @@ def rmse(model, x_data, y_data):
 
 This study reveals that higher-degree polynomials tend to overfit the training data, leading to larger errors on the test set compared to the training set.
 
-![RMS_plot](RMS_plot.png)
+<div align="center">
+    <img src="RMS_plot.png" height="1000" />
+</div>
 
 ![RMSE_dgrees_plot](RMSE_dgrees_plot.png)
 
