@@ -6,6 +6,8 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
+# Import Time
+import time
 
 # TODO: Implement the MLP class, to be equivalent to the MLP from the last exercise!
 class MLP(nn.Module):
@@ -78,7 +80,7 @@ class CNN(nn.Module):
 
 
 
-def train(args, model, device, train_loader, optimizer, epoch):
+def train(args, model, device, train_loader, optimizer, epoch, train_info):
     model.train()
     for batch_idx, (data, target) in enumerate(train_loader):
         data, target = data.to(device), target.to(device)
@@ -91,8 +93,13 @@ def train(args, model, device, train_loader, optimizer, epoch):
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 epoch, batch_idx * len(data), len(train_loader.dataset),
                 100. * batch_idx / len(train_loader), loss.item()))
+    average_train_loss = loss.item() / data.shape[0]
 
-def test(model, device, test_loader):
+    # Set Train info
+    train_info_instance = {'epoch': epoch, 'time': time.time(), 'loss': average_train_loss}
+    train_info.append(train_info_instance)
+
+def test(model, device, test_loader, epoch, test_info):
     model.eval()
     test_loss = 0
     correct = 0
@@ -109,6 +116,10 @@ def test(model, device, test_loader):
     print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
         test_loss, correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset)))
+    
+    # Set Test info
+    test_info_instance = {'epoch': epoch, 'time': time.time(), 'loss': test_loss, 'accuracy': 100. * correct / len(test_loader.dataset)}
+    test_info.append(test_info_instance)
 
 
 def main():
@@ -128,10 +139,28 @@ def main():
                         help='random seed (default: 1)')
     parser.add_argument('--log-interval', type=int, default=10, metavar='N',
                         help='how many batches to wait before logging training status')
+    
+    # Custom arguments
+    
+    # Optimizer Choice
+    parser.add_argument('--optimizer', type=str, default='SGD', metavar='O',
+                        help='Optimizer to use (default: SGD)')
+    
+    # Dataset Choice Between MNIST and CIFAR10
+    parser.add_argument('--dataset', type=str, default='MNIST', metavar='D',
+                        help='Dataset to use (default: MNIST)')
+    
+    # Model Choice Between MLP and CNN
+    parser.add_argument('--model', type=str, default='MLP', metavar='M',
+                        help='Model to use (default: MLP)')
+    
     args = parser.parse_args()
     use_cuda = not args.no_cuda and torch.cuda.is_available()
 
     torch.manual_seed(args.seed)
+    
+    train_info = []
+    test_info = []
 
     device = torch.device("cuda" if use_cuda else "cpu")
 
@@ -148,20 +177,75 @@ def main():
         transforms.ToTensor(),
         transforms.Normalize((0.1307,), (0.3081,))
         ])
-    dataset_train = datasets.MNIST('../data', train=True, download=True,
-                       transform=transform)
-    dataset_test = datasets.MNIST('../data', train=False,
-                       transform=transform)
-    train_loader = torch.utils.data.DataLoader(dataset_train,**train_kwargs)
+    
+    # Get Dataset
+    if args.dataset == 'MNIST':
+        dataset_train = datasets.MNIST('../data', train=True, download=True,
+                        transform=transform)
+        dataset_test = datasets.MNIST('../data', train=False,
+                        transform=transform)
+    elif args.dataset == 'CIFAR10':
+        # Change the transform for CIFAR10
+        transform=transforms.Compose([
+            transforms.ToTensor()
+            ])
+        dataset_train = datasets.CIFAR10('../data', train=True, download=True,
+                        transform=transform)
+        dataset_test = datasets.CIFAR10('../data', train=False,
+                        transform=transform)
+    train_loader = torch.utils.data.DataLoader(dataset_train, **train_kwargs)
     test_loader = torch.utils.data.DataLoader(dataset_test, **test_kwargs)
 
-    model = MLP().to(device)
+    # Choose Model
+    if args.model == 'MLP':
+        model = MLP().to(device)
+    elif args.model == 'CNN':
+        model = CNN().to(device)
 
-    optimizer = optim.SGD(model.parameters(), lr=args.lr)
+    # Choose Optimizer
+    if args.optimizer == 'SGD':
+        optimizer = optim.SGD(model.parameters(), lr=args.lr)
+    elif args.optimizer == 'Adam':
+        optimizer = optim.Adam(model.parameters(), lr=args.lr)
+    elif args.optimizer == 'Adagrad':
+        optimizer = optim.Adagrad(model.parameters(), lr=args.lr)
+    elif args.optimizer == 'RMSprop':
+        optimizer = optim.RMSprop(model.parameters(), lr=args.lr)
+
+    # Start Timer
+    start = time.time()
 
     for epoch in range(1, args.epochs + 1):
-        train(args, model, device, train_loader, optimizer, epoch)
-        test(model, device, test_loader)
+        train(args, model, device, train_loader, optimizer, epoch, train_info)
+        test(model, device, test_loader, epoch, test_info)
+
+    # End Timer
+    end = time.time()
+
+    # Save infos to txt file
+
+    # Define file name
+    file_name = 'datalog.txt'
+
+    # Check and Open file with append mode
+    with open(file_name, 'a') as file:
+        # Write a plit line
+        file.write('--------------------------------------\n')
+        # Write arguments
+        file.write('Arguments: ' + str(args) + '\n')
+        # Write the start and end time
+        file.write('Start Time: ' + str(start) + '\n')
+        file.write('End Time: ' + str(end) + '\n')
+        # Write the train info
+        file.write('Train Info: ' + str(train_info) + '\n')
+        # Write the test info
+        file.write('Test Info: ' + str(test_info) + '\n')
+        # Write a plit line
+        file.write('--------------------------------------\n')
+        # Write a new line
+        file.write('\n\n')
+
+
 
 
 if __name__ == '__main__':
