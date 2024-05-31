@@ -9,18 +9,17 @@ from torch.optim.lr_scheduler import StepLR
 # Import Time
 import time
 
-# TODO: Implement the MLP class, to be equivalent to the MLP from the last exercise!
 class MLP(nn.Module):
     def __init__(self):
         super().__init__()
         # Take 28x28 images as input and output 512 features
         self.linear0 = nn.Linear(28*28, 512)
         # ReLU activation function
-        self.relu0 = nn.ReLU()
+        self.sigmoid0 = nn.Sigmoid()
         # Output layer: Take 512 features as input and output 128 classes
         self.linear1 = nn.Linear(512, 128)
         # ReLU activation function
-        self.relu1 = nn.ReLU()
+        self.sigmoid1 = nn.Sigmoid()
         # Output layer: Take 128 features as input and output 10 classes
         self.linear2 = nn.Linear(128, 10)
 
@@ -28,13 +27,37 @@ class MLP(nn.Module):
     def forward(self, x):
         x = torch.flatten(x, 1)
         x = self.linear0(x)
-        x = self.relu0(x)
+        x = self.sigmoid0(x)
         x = self.linear1(x)
-        x = self.relu1(x)
+        x = self.sigmoid1(x)
         x = self.linear2(x)
         x = F.log_softmax(x, dim=1)
         return x
 
+class MLP_CIFAR10(nn.Module):
+    def __init__(self):
+        super().__init__()
+        # Take 32x32x3 images as input and output 512 features
+        self.linear0 = nn.Linear(32*32*3, 512)
+        # ReLU activation function
+        self.sigmoid0 = nn.Sigmoid()
+        # Output layer: Take 512 features as input and output 128 classes
+        self.linear1 = nn.Linear(512, 128)
+        # ReLU activation function
+        self.sigmoid1 = nn.Sigmoid()
+        # Output layer: Take 128 features as input and output 10 classes
+        self.linear2 = nn.Linear(128, 10)
+
+
+    def forward(self, x):
+        x = torch.flatten(x, 1)
+        x = self.linear0(x)
+        x = self.sigmoid0(x)
+        x = self.linear1(x)
+        x = self.sigmoid1(x)
+        x = self.linear2(x)
+        x = F.log_softmax(x, dim=1)
+        return x
 
 """ 
 Define CNN as Follow Structure:
@@ -141,7 +164,9 @@ def main():
                         help='how many batches to wait before logging training status')
     
     # Custom arguments
-    
+    # Logfile prefix
+    parser.add_argument('--prefix', type=str, default='0', metavar='P',
+                        help='Logfile prefix to write the results to')
     # Optimizer Choice
     parser.add_argument('--optimizer', type=str, default='SGD', metavar='O',
                         help='Optimizer to use (default: SGD)')
@@ -197,8 +222,10 @@ def main():
     test_loader = torch.utils.data.DataLoader(dataset_test, **test_kwargs)
 
     # Choose Model
-    if args.model == 'MLP':
+    if args.model == 'MLP' and args.dataset == 'MNIST':
         model = MLP().to(device)
+    elif args.model == 'MLP' and args.dataset == 'CIFAR10':
+        model = MLP_CIFAR10().to(device)
     elif args.model == 'CNN':
         model = CNN().to(device)
 
@@ -227,7 +254,7 @@ def main():
     # Save infos to txt file
 
     # Define file name
-    file_name = 'datalog.txt'
+    file_name = "logs/datalog_" + args.prefix + ".txt"
 
     # Check and Open file with append mode
     with open(file_name, 'a') as file:
