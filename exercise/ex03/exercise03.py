@@ -211,6 +211,8 @@ def main():
         optimizer = optim.Adagrad(model.parameters(), lr=args.lr)
     elif args.optimizer == 'RMSprop':
         optimizer = optim.RMSprop(model.parameters(), lr=args.lr)
+    
+
 
     # Start Timer
     start = time.time()
