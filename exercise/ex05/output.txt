@@ -1,0 +1,55 @@
+####################
+--------------------
+batch_size: 128
+test_batch_size: 1024
+epochs: 2
+lr: 0.0001
+L2_reg: None
+no_cuda: False
+seed: 1
+log_interval: 200
+output_file: output.txt
+model: ResNet
+--------------------
+--------------------
+TRAINING INFORMATION
+Starting training at: 1717317142.7621
+Finished training at: 1717317146.9391
+Current time: 1717317146.7956; Train Epoch: 1 [0/50000 (0%)]	Loss: 0.01999170519411564
+Current time: 1717317146.8970; Train Epoch: 2 [0/50000 (0%)]	Loss: 0.019007761031389236
+--------------------
+--------------------
+TEST INFORMATION
+Current time: 1717317147.7148; Test Epoch: 2, Test set: Average loss: 2.32916142578125, Accuracy: 798/10000 (7.9800%)
+--------------------
+####################
+####################
+--------------------
+batch_size: 128
+test_batch_size: 1024
+epochs: 2
+lr: 0.0001
+L2_reg: None
+no_cuda: False
+seed: 42
+log_interval: 200
+output_file: output.txt
+model: ResNet
+--------------------
+--------------------
+TRAINING INFORMATION
+Starting training at: 1717318372.8963
+Finished training at: 1717318376.4654
+Current time: 1717318376.3170; Train Epoch: 1 [0/50000 (0%)]	Loss: 0.02502203918993473
+Current time: 1717318376.4161; Train Epoch: 2 [0/50000 (0%)]	Loss: 0.020090114325284958
+--------------------
+--------------------
+TEST INFORMATION
+Current time: 1717318377.2829; Test Epoch: 2, Test set: Average loss: 2.4306882446289064, Accuracy: 1153/10000 (11.5300%)
+--------------------
+--------------------
+MODEL INFORMATION
+Number of parameters: 1081482
+Number of MAC operations: 118963020000
+--------------------
+####################

@@ -163,3 +163,7 @@ cython_debug/
 #.idea/
 
 .DS_Store
+
+# ex05 data
+exercise/ex05/data
+exercise/ex05/data/*
