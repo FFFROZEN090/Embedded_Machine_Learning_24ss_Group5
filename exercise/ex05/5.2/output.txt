@@ -1,0 +1,234 @@
+####################
+--------------------
+batch_size: 128
+test_batch_size: 1024
+epochs: 50
+lr: 0.0001
+L2_reg: None
+no_cuda: False
+seed: 1
+log_interval: 200
+output_file: output.txt
+model: ResNet
+--------------------
+--------------------
+TRAINING INFORMATION
+Starting training at: 1717334560.8851
+Finished training at: 1717335125.4338
+Train Epoch: 1, Train set: Average loss: 0.013591724252700806
+Train Epoch: 2, Train set: Average loss: 0.011108877425193786
+Train Epoch: 3, Train set: Average loss: 0.009998215794563293
+Train Epoch: 4, Train set: Average loss: 0.009043980907201767
+Train Epoch: 5, Train set: Average loss: 0.008310413887500763
+Train Epoch: 6, Train set: Average loss: 0.007679334789514542
+Train Epoch: 7, Train set: Average loss: 0.007168467794656753
+Train Epoch: 8, Train set: Average loss: 0.00672870119214058
+Train Epoch: 9, Train set: Average loss: 0.006368565347194672
+Train Epoch: 10, Train set: Average loss: 0.006068160685300827
+Train Epoch: 11, Train set: Average loss: 0.005759951843619346
+Train Epoch: 12, Train set: Average loss: 0.005400730295181275
+Train Epoch: 13, Train set: Average loss: 0.005168779448866844
+Train Epoch: 14, Train set: Average loss: 0.004839189949631691
+Train Epoch: 15, Train set: Average loss: 0.004586362417936325
+Train Epoch: 16, Train set: Average loss: 0.004329169090390206
+Train Epoch: 17, Train set: Average loss: 0.004022897374629975
+Train Epoch: 18, Train set: Average loss: 0.0038686247277259825
+Train Epoch: 19, Train set: Average loss: 0.003597745160460472
+Train Epoch: 20, Train set: Average loss: 0.0033592237788438797
+Train Epoch: 21, Train set: Average loss: 0.0031536005195975303
+Train Epoch: 22, Train set: Average loss: 0.002871955697834492
+Train Epoch: 23, Train set: Average loss: 0.0026779034081101417
+Train Epoch: 24, Train set: Average loss: 0.0025125899374485016
+Train Epoch: 25, Train set: Average loss: 0.0023392819651961326
+Train Epoch: 26, Train set: Average loss: 0.002122670419514179
+Train Epoch: 27, Train set: Average loss: 0.0018927003839612007
+Train Epoch: 28, Train set: Average loss: 0.0017423294873535632
+Train Epoch: 29, Train set: Average loss: 0.0015272244131565094
+Train Epoch: 30, Train set: Average loss: 0.0013930925807356834
+Train Epoch: 31, Train set: Average loss: 0.0011765125764161349
+Train Epoch: 32, Train set: Average loss: 0.0011113196233659983
+Train Epoch: 33, Train set: Average loss: 0.0009891361421346665
+Train Epoch: 34, Train set: Average loss: 0.0008254832274839282
+Train Epoch: 35, Train set: Average loss: 0.0007929702249914408
+Train Epoch: 36, Train set: Average loss: 0.0007315552634745837
+Train Epoch: 37, Train set: Average loss: 0.0005545493436418474
+Train Epoch: 38, Train set: Average loss: 0.0006191492508910596
+Train Epoch: 39, Train set: Average loss: 0.0004900373430829496
+Train Epoch: 40, Train set: Average loss: 0.0005476892615109682
+Train Epoch: 41, Train set: Average loss: 0.0004840410780068487
+Train Epoch: 42, Train set: Average loss: 0.00036208476828876885
+Train Epoch: 43, Train set: Average loss: 0.00032134011929854753
+Train Epoch: 44, Train set: Average loss: 0.00048070048389956357
+Train Epoch: 45, Train set: Average loss: 0.0003664712352817878
+Train Epoch: 46, Train set: Average loss: 0.00028119386269012463
+Train Epoch: 47, Train set: Average loss: 0.0004204840159974992
+Train Epoch: 48, Train set: Average loss: 0.0004203154051490128
+Train Epoch: 49, Train set: Average loss: 0.00019280448886333033
+Train Epoch: 50, Train set: Average loss: 0.0003283762399479747
+--------------------
+--------------------
+TEST INFORMATION
+Current time: 1717335126.5072; Test Epoch: 50, Test set: Average loss: 1.34626640625, Accuracy: 7839/10000 (78.3900%)
+--------------------
+--------------------
+MODEL INFORMATION
+Number of parameters: 1081482
+Number of MAC operations: 2712182737398
+--------------------
+####################
+####################
+--------------------
+batch_size: 128
+test_batch_size: 1024
+epochs: 50
+lr: 0.0001
+L2_reg: None
+no_cuda: False
+seed: 1
+log_interval: 200
+output_file: output.txt
+model: VGG11
+--------------------
+--------------------
+TRAINING INFORMATION
+Starting training at: 1717335130.8659
+Finished training at: 1717335652.8625
+Train Epoch: 1, Train set: Average loss: 0.01479539299249649
+Train Epoch: 2, Train set: Average loss: 0.011567479341030121
+Train Epoch: 3, Train set: Average loss: 0.009652643926143647
+Train Epoch: 4, Train set: Average loss: 0.008156470148563385
+Train Epoch: 5, Train set: Average loss: 0.006986071536540985
+Train Epoch: 6, Train set: Average loss: 0.005947776212096214
+Train Epoch: 7, Train set: Average loss: 0.005119122142195702
+Train Epoch: 8, Train set: Average loss: 0.004256553366780281
+Train Epoch: 9, Train set: Average loss: 0.0035335900235176085
+Train Epoch: 10, Train set: Average loss: 0.002715322300195694
+Train Epoch: 11, Train set: Average loss: 0.0021200932988524436
+Train Epoch: 12, Train set: Average loss: 0.0015911322394013404
+Train Epoch: 13, Train set: Average loss: 0.001249551685899496
+Train Epoch: 14, Train set: Average loss: 0.0009653149177879095
+Train Epoch: 15, Train set: Average loss: 0.00088361657358706
+Train Epoch: 16, Train set: Average loss: 0.0006519584361091256
+Train Epoch: 17, Train set: Average loss: 0.0006580585359223187
+Train Epoch: 18, Train set: Average loss: 0.0005059873975720257
+Train Epoch: 19, Train set: Average loss: 0.0004808344091102481
+Train Epoch: 20, Train set: Average loss: 0.0005360687213763595
+Train Epoch: 21, Train set: Average loss: 0.0004047612968832254
+Train Epoch: 22, Train set: Average loss: 0.00037343109850771725
+Train Epoch: 23, Train set: Average loss: 0.0004243764243554324
+Train Epoch: 24, Train set: Average loss: 0.00034758543624542653
+Train Epoch: 25, Train set: Average loss: 0.00033075189534574747
+Train Epoch: 26, Train set: Average loss: 0.0003440745937125757
+Train Epoch: 27, Train set: Average loss: 0.00029098592972848567
+Train Epoch: 28, Train set: Average loss: 0.00034963093010243027
+Train Epoch: 29, Train set: Average loss: 0.00030408597863744945
+Train Epoch: 30, Train set: Average loss: 0.00024876187347108497
+Train Epoch: 31, Train set: Average loss: 0.0003004626856883988
+Train Epoch: 32, Train set: Average loss: 0.0002875556059391238
+Train Epoch: 33, Train set: Average loss: 0.0002545053106104024
+Train Epoch: 34, Train set: Average loss: 0.00024035210878471845
+Train Epoch: 35, Train set: Average loss: 0.0002188809145381674
+Train Epoch: 36, Train set: Average loss: 0.0002638294569356367
+Train Epoch: 37, Train set: Average loss: 0.00023962872789241375
+Train Epoch: 38, Train set: Average loss: 0.00023867963794618844
+Train Epoch: 39, Train set: Average loss: 0.00020118017611675895
+Train Epoch: 40, Train set: Average loss: 0.00022478091369732283
+Train Epoch: 41, Train set: Average loss: 0.00023084809008869342
+Train Epoch: 42, Train set: Average loss: 0.0001945937178831082
+Train Epoch: 43, Train set: Average loss: 0.0001991328208334744
+Train Epoch: 44, Train set: Average loss: 0.0001936457393760793
+Train Epoch: 45, Train set: Average loss: 0.00017003482441301459
+Train Epoch: 46, Train set: Average loss: 0.00020918046909733677
+Train Epoch: 47, Train set: Average loss: 0.00017068351918132977
+Train Epoch: 48, Train set: Average loss: 0.000212512117032893
+Train Epoch: 49, Train set: Average loss: 0.0001523463590076426
+Train Epoch: 50, Train set: Average loss: 0.00016219808818015736
+--------------------
+--------------------
+TEST INFORMATION
+Current time: 1717335654.0200; Test Epoch: 50, Test set: Average loss: 1.5001988647460938, Accuracy: 7542/10000 (75.4200%)
+--------------------
+--------------------
+MODEL INFORMATION
+Number of parameters: 28144010
+Number of MAC operations: 70572287123420
+--------------------
+####################
+####################
+--------------------
+batch_size: 128
+test_batch_size: 1024
+epochs: 50
+lr: 0.0001
+L2_reg: None
+no_cuda: False
+seed: 1
+log_interval: 200
+output_file: output.txt
+model: ConvNet
+--------------------
+--------------------
+TRAINING INFORMATION
+Starting training at: 1717335658.3716
+Finished training at: 1717335958.3137
+Train Epoch: 1, Train set: Average loss: 0.013791127543449402
+Train Epoch: 2, Train set: Average loss: 0.011291095542907715
+Train Epoch: 3, Train set: Average loss: 0.010388319053649902
+Train Epoch: 4, Train set: Average loss: 0.009763412458896637
+Train Epoch: 5, Train set: Average loss: 0.009274725061655045
+Train Epoch: 6, Train set: Average loss: 0.008805662161111831
+Train Epoch: 7, Train set: Average loss: 0.008411287443637849
+Train Epoch: 8, Train set: Average loss: 0.008066511652469636
+Train Epoch: 9, Train set: Average loss: 0.007709974383115769
+Train Epoch: 10, Train set: Average loss: 0.007407315192222595
+Train Epoch: 11, Train set: Average loss: 0.007116762284040451
+Train Epoch: 12, Train set: Average loss: 0.006824989277124405
+Train Epoch: 13, Train set: Average loss: 0.006561285046339035
+Train Epoch: 14, Train set: Average loss: 0.006294980446100235
+Train Epoch: 15, Train set: Average loss: 0.0060329592454433445
+Train Epoch: 16, Train set: Average loss: 0.00581865420460701
+Train Epoch: 17, Train set: Average loss: 0.005549558576345444
+Train Epoch: 18, Train set: Average loss: 0.005313313766121864
+Train Epoch: 19, Train set: Average loss: 0.005059404482245445
+Train Epoch: 20, Train set: Average loss: 0.004834223576784134
+Train Epoch: 21, Train set: Average loss: 0.004603891941905022
+Train Epoch: 22, Train set: Average loss: 0.004342201845049858
+Train Epoch: 23, Train set: Average loss: 0.0040990562558174135
+Train Epoch: 24, Train set: Average loss: 0.003862733138203621
+Train Epoch: 25, Train set: Average loss: 0.003612706869840622
+Train Epoch: 26, Train set: Average loss: 0.003373544113636017
+Train Epoch: 27, Train set: Average loss: 0.0031311255404353143
+Train Epoch: 28, Train set: Average loss: 0.002917718540728092
+Train Epoch: 29, Train set: Average loss: 0.0026707695001363754
+Train Epoch: 30, Train set: Average loss: 0.00243717841476202
+Train Epoch: 31, Train set: Average loss: 0.0022032668969035147
+Train Epoch: 32, Train set: Average loss: 0.001985586770772934
+Train Epoch: 33, Train set: Average loss: 0.0018051615430414677
+Train Epoch: 34, Train set: Average loss: 0.0015708992451429367
+Train Epoch: 35, Train set: Average loss: 0.0014018319264054299
+Train Epoch: 36, Train set: Average loss: 0.001210126366764307
+Train Epoch: 37, Train set: Average loss: 0.0010735524141788483
+Train Epoch: 38, Train set: Average loss: 0.0009741585770249367
+Train Epoch: 39, Train set: Average loss: 0.0008173909169435501
+Train Epoch: 40, Train set: Average loss: 0.0007148182398825884
+Train Epoch: 41, Train set: Average loss: 0.000615128755569458
+Train Epoch: 42, Train set: Average loss: 0.0005150363469868898
+Train Epoch: 43, Train set: Average loss: 0.00045315519239753487
+Train Epoch: 44, Train set: Average loss: 0.00040794842954725025
+Train Epoch: 45, Train set: Average loss: 0.00031108899407088756
+Train Epoch: 46, Train set: Average loss: 0.0003417975166812539
+Train Epoch: 47, Train set: Average loss: 0.0003986244100704789
+Train Epoch: 48, Train set: Average loss: 0.0003185350427776575
+Train Epoch: 49, Train set: Average loss: 0.0001635156343691051
+Train Epoch: 50, Train set: Average loss: 0.0001391314153280109
+--------------------
+--------------------
+TEST INFORMATION
+Current time: 1717335959.4640; Test Epoch: 50, Test set: Average loss: 2.325263879394531, Accuracy: 6430/10000 (64.3000%)
+--------------------
+--------------------
+MODEL INFORMATION
+Number of parameters: 2453962
+Number of MAC operations: 6150683975660
+--------------------
+####################
