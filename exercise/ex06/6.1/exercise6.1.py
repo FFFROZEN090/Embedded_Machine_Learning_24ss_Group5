@@ -137,11 +137,9 @@ class VGG11(nn.Module):
         nn.Flatten(1),
         nn.Linear(512 ,4096),
         nn.Dropout(dropout_p),
-        # self.norm_layer(4096, twoD=False),
         nn.ReLU(),
         nn.Linear(4096, 4096),
         nn.Dropout(dropout_p),
-        # self.norm_layer(4096, twoD=False),
         nn.ReLU(),
         nn.Linear(4096, 10)
         ]
@@ -174,7 +172,7 @@ def train(args, model, device, train_loader, optimizer, epoch, pruning_rate):
     
     # Apply pruning at the end of the epoch
     if pruning_rate > 0.0:
-        apply_pruning(model, pruning_rate)
+        apply_pruning(model, pruning_rate, args.structured)
     
     return avg_train_loss
 
@@ -199,17 +197,36 @@ def test(model, device, test_loader, epoch):
         100. * correct / len(test_loader.dataset)))
     return test_loss, 100. * correct / len(test_loader.dataset)
 
-def apply_pruning(model, amount):
-    parameters_to_prune = []
+def apply_pruning(model, amount, structured=False):
     for module in model.layers:
         if isinstance(module, nn.Conv2d) or isinstance(module, nn.Linear):
-            parameters_to_prune.append((module, 'weight'))
+            if structured:
+                prune.ln_structured(module, name='weight', amount=amount, n=2, dim=0)
+            else:
+                prune.l1_unstructured(module, name='weight', amount=amount)
+            prune.remove(module, 'weight')
 
-    prune.global_unstructured(parameters_to_prune, pruning_method=prune.L1Unstructured, amount=amount)
+def calculate_bops(model):
+    bops = 0
+    for layer in model.layers:
+        if isinstance(layer, nn.Conv2d) or isinstance(layer, nn.Linear):
+            weight = layer.weight
+            pruned_weights = weight.numel() - torch.sum(weight == 0).item()
+            bops += pruned_weights
+    return bops
 
-    # Verify the pruning
-    for module, name in parameters_to_prune:
-        prune.remove(module, name)
+def plot_bops(bops_list):
+    pruning_rates, bops_values = zip(*bops_list)
+    plt.figure()
+    plt.plot(pruning_rates, bops_values, marker='o', markersize=2, label='BOPs')
+    plt.xlabel('Pruning Rate')
+    plt.ylabel('BOPs')
+    plt.title('BOPs Comparison Across Pruning Rates')
+    plt.legend()
+    plt.grid(True)
+    plt.savefig('bops_comparison.png')
+    plt.clf()
+
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch SVHN Example')
@@ -233,8 +250,10 @@ def main():
                         help='how many batches to wait before logging training status')
     parser.add_argument('--norm_layer', type=str, default='Identity',
                         help='norm_layer (default: Identity)')
-    parser.add_argument('--pruning-rates', type=float, nargs='+', default=[0.0, 0.2, 0.4, 0.6, 0.8],
+    parser.add_argument('--pruning_rates', type=float, nargs='+', default=[0.0, 0.2, 0.4, 0.6, 0.8],
                         help='list of pruning rates to test (default: [0.0, 0.2, 0.4, 0.6, 0.8])')
+    parser.add_argument('--structured', action='store_true', default=False,
+                        help='apply structured pruning')
     args = parser.parse_args()
     use_cuda = not args.no_cuda and torch.cuda.is_available()
 
@@ -271,16 +290,12 @@ def main():
     elif norm == 'GroupNorm':
         norm_layer = group_norm
     print(f'Using norm_layer: {norm_layer}')
-    model = VGG11(dropout_p=args.dropout_p, norm_layer=norm_layer).to(device)
     
-    optimizer = optim.Adam(model.parameters(), lr=args.lr)
-
-    print(f'Starting training at: {time.time():.4f}')
-
     train_loss_list = []
     test_loss_list = []
     test_acc_list = []
     pruning_results = {rate: [] for rate in args.pruning_rates}
+    bops_list = []
 
     # Train the model with different pruning rates and plot the train loss, test loss, and test accuracy
     for pruning_rate in args.pruning_rates:
@@ -290,57 +305,25 @@ def main():
 
         print(f'Starting training with pruning rate: {pruning_rate}')
         for epoch in range(1, args.epochs + 1):
-            train_loss = train(args, model, device, train_loader, optimizer, epoch)
+            train_loss = train(args, model, device, train_loader, optimizer, epoch, pruning_rate)
             test_loss, acc = test(model, device, test_loader, epoch)
             train_loss_list.append(train_loss)
             test_loss_list.append(test_loss)
             test_acc_list.append(acc)
 
-            # Apply pruning
-            if pruning_rate > 0.0:
-                apply_pruning(model, pruning_rate)
-
             pruning_results[pruning_rate].append(acc)
+
+        # Calculate BOPs
+        bops = calculate_bops(model)
+        bops_list.append((pruning_rate, bops))
+        print(f'Pruning rate: {pruning_rate}, BOPs: {bops}')
 
     # Baseline accuracy without pruning
     baseline_acc = pruning_results[0.0][-1]
     
     # Plot results
-    plot_loss(train_loss_list, test_loss_list, 'pruning')
-    plot_acc(test_acc_list, 'pruning')
-    plot_pruning(pruning_results, baseline_acc)
+    plot_bops(bops_list)
 
 if __name__ == '__main__':
     main()
-
-def plot_loss(train_loss_list, test_loss_list, info):
-    epochs = range(1, len(train_loss_list) + 1)
-    plt.plot(epochs, train_loss_list, marker='o', label='train loss')
-    plt.plot(epochs, test_loss_list, marker='o', label='test loss')
-    plt.legend()
-
-    plt.xlabel("epochs")
-    plt.ylabel("loss")
-    plt.savefig(f'loss_{info}.png')
-    plt.clf()
-
-def plot_acc(test_acc_list, info):
-    epochs = range(1, len(test_acc_list) + 1)
-    plt.plot(epochs, test_acc_list, marker='o', label='test accuracy')
-    plt.legend()
-    plt.xlabel("epoch")
-    plt.ylabel("accuracy")
-    plt.savefig(f'acc_{info}.png')
-    plt.clf()
-
-def plot_pruning(pruning_results, baseline_acc):
-    for pruning_rate, acc_list in pruning_results.items():
-        epochs = range(1, len(acc_list) + 1)
-        plt.plot(epochs, acc_list, marker='o', label=f'pruning rate {pruning_rate}')
-    plt.axhline(y=baseline_acc, color='r', linestyle='-', label='baseline accuracy')
-    plt.legend()
-    plt.xlabel("epoch")
-    plt.ylabel("accuracy")
-    plt.savefig('pruning_accuracy.png')
-    plt.clf()
 
